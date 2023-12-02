@@ -1,4 +1,4 @@
-config.py
+.DS_Store
 env/
 __pycache__
 app/__pycache__
