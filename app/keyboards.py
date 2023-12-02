@@ -17,5 +17,5 @@ async def entries():
         if entry.occupancy:
             entries_kb.add(InlineKeyboardButton(text=str(entry.date), callback_data=f'entry_{str(entry.date)}'))
 
-    return entries_kb.adjust(2).as_markup()
+    return entries_kb.adjust(7).as_markup()
 
