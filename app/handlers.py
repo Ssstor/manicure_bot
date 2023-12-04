@@ -28,18 +28,21 @@ async def get_phone(message, state):
 async def set_entry(message, state):
     await state.update_data(phone=message.text)
 
-    await message.answer('Теперь выберете время записи:', reply_markup=await kb.entries())
+    await message.answer('Теперь выберете время записи:pkodwpkodepdekwedijwjideijoewijodwedwijodeijoijoijoijoijooijoijo', reply_markup=await kb.entries())
 
 
 @router.callback_query(F.data.startswith('entry_'))
 async def entry_selected(callback, state):
     entry_date = callback.data.split('_')[1]
-    data = await state.get_data() 
-    async with async_sessionmaker(engine)() as session:
-        await session.execute(update(Entry).where(Entry.date == entry_date).values(occupancy=False, user_phone=data['phone']))
+    if entry_date == '0':
+        pass
+    else:
+        data = await state.get_data() 
+        async with async_sessionmaker(engine)() as session:
+            await session.execute(update(Entry).where(Entry.date == entry_date).values(occupancy=False, user_phone=data['phone']))
 
-        await session.commit()
-        await callback.message.answer(f'Вы выбрали запись на дату {entry_date}') 
+            await session.commit()
+            await callback.message.answer(f'Вы выбрали запись на дату {entry_date}') 
 
 
 

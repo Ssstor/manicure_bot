@@ -2,7 +2,6 @@ from aiogram.types import InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardBut
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app.database.requests import get_entries
 
-
 main = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='Записаться')],
     # [KeyboardButton(text='Ваши записи')]
@@ -12,10 +11,24 @@ main = ReplyKeyboardMarkup(keyboard=[
 async def entries():
     entries_kb = InlineKeyboardBuilder()
     entries = await get_entries()
+    count = 5
 
     for entry in entries:
-        if entry.occupancy:
-            entries_kb.add(InlineKeyboardButton(text=str(entry.date), callback_data=f'entry_{str(entry.date)}'))
+        count += 1
 
-    return entries_kb.adjust(7).as_markup()
+        if count == 6:
+            count = 1
+            date = entry.date.split('-')[2][:2]
+            entries_kb.add(InlineKeyboardButton(text=f'{date}', callback_data='ojeiejo'))
+
+        if entry.occupancy:
+            date = entry.date.split()[1].split(':')[0] + 'ч' # + entry.date.split()[1].split(':')[1]
+            entries_kb.add(InlineKeyboardButton(text=f'{date} ✅', callback_data=f'entry_{entry.date}'))
+
+        else:
+            date = entry.date.split()[1].split(':')[0] + 'ч' # + entry.date.split()[1].split(':')[1] 
+            entries_kb.add(InlineKeyboardButton(text=f'{date} ❌', callback_data='entry_0'))
+
+
+    return entries_kb.adjust(6).as_markup()
 

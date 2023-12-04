@@ -20,10 +20,10 @@ async def get_entries():
 
         entries_count = int(entries_count.scalar())
 
-        if entries_count < 25:
+        if entries_count < 30:
             current_date = datetime.now()
             i = 0
-            while entries_count < 25:
+            while entries_count < 30:
                 new_date = current_date + timedelta(days=i)
 
                 if new_date.weekday() < 5:
@@ -37,7 +37,7 @@ async def get_entries():
             await session.commit()
 
 
-        result = await session.scalars(select(Entry))
+        result = await session.scalars(select(Entry).order_by(Entry.date))
 
         return result
 
